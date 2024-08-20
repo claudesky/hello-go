@@ -28,3 +28,7 @@ A simple chat box
 - Open the index html file
 
     `google-chrome-stable ./frontend/index.html`
+
+- Open the index file in another browser/tab
+
+    `chromium ./frontend/index.html`
