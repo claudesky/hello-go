@@ -7,24 +7,61 @@
   </head>
   <body>
     Hello, world!
-    <chat-box>
-      Some stuff here
-    </chat-box>
+
+    <div>Welcome to the Chat Box application.</div>
+    <style>
+      /* Global style */
+      div {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+
+    <template id="chat-box-template">
+      <div>This is a div</div>
+      <style>
+        /* Style scoped to chat-box DOM */
+        div {
+          font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
+            sans-serif;
+        }
+      </style>
+    </template>
+
+    <chat-box websocket="ws://localhost:9101/ws"> Some stuff here </chat-box>
 
     <script>
       class ChatBox extends HTMLElement {
         constructor() {
           super()
-          console.debug("initializing websocket connection.")
-          this.socketConnection = new WebSocket("ws://localhost:9101/ws")
+
+          console.debug('initializing chat box template')
+
+          const template = document.getElementById('chat-box-template').content
+
+          this.shadowRoot = this.attachShadow({ mode: 'closed' })
+
+          this.shadowRoot.appendChild(template.cloneNode(true))
+
+          this.socketConnection = WebSocket.prototype // typehint
         }
 
+        shadowRoot
         socketConnection
 
-        initSocket() {
-          return new Promise((resolve, reject) => {
+        initSocket = () =>
+          new Promise((resolve, reject) => {
+            const websocketURL =
+              this.attributes.getNamedItem('websocket').textContent
+
+            if (websocketURL === null)
+              throw new Error(
+                'The [websocket] attribute was not set on the chat-box element.'
+              )
+
+            this.socketConnection = new WebSocket(websocketURL)
+
             this.socketConnection.onopen = (ev) => {
-              console.debug("websocket connected")
+              console.debug('websocket connected')
               resolve()
             }
 
@@ -32,17 +69,15 @@
               reject(ev)
             }
           })
-        }
 
         async connectedCallback() {
-          this.attachShadow({ mode: "closed" })
           await this.initSocket()
-          console.debug("socket init done, send ping")
-          this.socketConnection.send("ping")
+          console.debug('socket init done, send ping')
+          this.socketConnection.send('ping')
         }
       }
 
-      customElements.define("chat-box", ChatBox)
+      customElements.define('chat-box', ChatBox)
     </script>
   </body>
 </html>
