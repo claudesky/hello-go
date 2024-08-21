@@ -16,8 +16,13 @@
       }
     </style>
 
-    <chat-box websocket="ws://localhost:9101/ws"> Some stuff here </chat-box>
+    <my-chat-box websocket="ws://localhost:9101/ws">
+      Could not load chat-box!
+    </my-chat-box>
 
-    <script src="components/chat-box.js"></script>
+    <script
+      src="components/chat-box.js"
+      componentSelector="my-chat-box"
+    ></script>
   </body>
 </html>

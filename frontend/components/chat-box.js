@@ -177,4 +177,7 @@ class ChatBox extends HTMLElement {
   }
 }
 
-customElements.define('chat-box', ChatBox)
+customElements.define(
+  document.currentScript.getAttribute('componentSelector') || 'chat-box',
+  ChatBox
+)
