@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -32,6 +33,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin:     func(r *http.Request) bool { return true },
+	Subprotocols:    []string{"access_token"},
 }
 
 // Client is a middleman between the websocket connection and the hub.
@@ -43,6 +45,9 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
+
+	// Client metadata
+	// TODO: some struct here
 }
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -119,6 +124,13 @@ func (c *Client) writePump() {
 
 // serveWs handles websocket requests from the peer.
 func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
+	// TODO: Auth here
+	authData := strings.Split(r.Header.Get("sec-websocket-protocol"), ", ")
+
+	if len(authData) != 2 || authData[0] != "access_token" {
+
+	}
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)

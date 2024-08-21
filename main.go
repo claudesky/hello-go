@@ -20,10 +20,17 @@ func main() {
 	hub := newHub()
 	go hub.run()
 
-	stack := middleware.Logging(http.HandlerFunc(httpHandler))
+	httpStack := middleware.Logging(http.HandlerFunc(httpHandler))
+	wsStack := middleware.Logging(
+		http.HandlerFunc(
+			func(w http.ResponseWriter, r *http.Request) {
+				websocketsHandler(hub, w, r)
+			},
+		),
+	)
 	mux := http.NewServeMux()
-	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) { websocketsHandler(hub, w, r) })
-	mux.Handle("/", stack)
+	mux.Handle("/ws", wsStack)
+	mux.Handle("/", httpStack)
 	log.Fatal((http.ListenAndServe(*addr, mux)))
 }
 

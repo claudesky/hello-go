@@ -99,7 +99,7 @@ class ChatBox extends HTMLElement {
   }
 
   // 0 = keep retrying
-  retryCount = 0
+  retryCount = 3
   retryDelaySec = 5
 
   handleConnectionError = () => {
@@ -137,7 +137,7 @@ class ChatBox extends HTMLElement {
    *
    */
   initSocket = () => {
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const websocketURL =
         this.attributes.getNamedItem('websocket').textContent
 
@@ -150,7 +150,7 @@ class ChatBox extends HTMLElement {
         )
       }
 
-      this.socketConnection = new WebSocket(websocketURL)
+      this.socketConnection = new WebSocket(websocketURL, ['access_token', 'test'])
 
       this.socketConnection.onopen = (ev) => {
         console.debug('websocket connected')
