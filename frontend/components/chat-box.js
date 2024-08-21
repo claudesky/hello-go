@@ -1,5 +1,5 @@
 class ChatBox extends HTMLElement {
-  template = `
+  template = /*html*/`
     <div id="status">Initializing...</div>
     <div id="message-box"></div>
     <template id="message">
@@ -9,8 +9,7 @@ class ChatBox extends HTMLElement {
       <input type="text" id="message-input" />
     </form>
     <style>
-      /* Scoped Style */
-
+      /* Scoped Style (when shadow dom) */
       #message-box {
         border: solid 1px black;
         height: 100px;
