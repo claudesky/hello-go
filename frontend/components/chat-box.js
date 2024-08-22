@@ -137,7 +137,7 @@ class ChatBox extends HTMLElement {
    *
    */
   initSocket = () => {
-    new Promise((resolve) => {
+    return new Promise((resolve) => {
       const websocketURL =
         this.attributes.getNamedItem('websocket').textContent
 
