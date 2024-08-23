@@ -142,12 +142,10 @@ class ChatBox extends HTMLElement {
         this.attributes.getNamedItem('websocket').textContent
 
       if (websocketURL === null) {
-        this.setStatus(
+        let error_message =
           'The [websocket] attribute was not set on the chat-box element.'
-        )
-        throw new Error(
-          'The [websocket] attribute was not set on the chat-box element.'
-        )
+        this.setStatus(error_message)
+        throw new Error(error_message)
       }
 
       this.socketConnection = new WebSocket(websocketURL, ['access_token', 'test'])
