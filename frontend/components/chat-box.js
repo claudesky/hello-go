@@ -1,5 +1,5 @@
 class ChatBox extends HTMLElement {
-  template = /*html*/`
+  template = /*html*/ `
     <div id="status">Initializing...</div>
     <div id="message-box"></div>
     <template id="message">
@@ -114,8 +114,7 @@ class ChatBox extends HTMLElement {
           const timer = setInterval(() => {
             wait--
             if (wait < 1) resolve(timer)
-            else
-              this.setStatus(`Connection failed. Retrying in ${wait}s.`)
+            else this.setStatus(`Connection failed. Retrying in ${wait}s.`)
           }, 1000)
         }).then((timer) => {
           this.setStatus(
@@ -138,8 +137,7 @@ class ChatBox extends HTMLElement {
    */
   initSocket = () => {
     return new Promise((resolve) => {
-      const websocketURL =
-        this.attributes.getNamedItem('websocket').textContent
+      const websocketURL = this.attributes.getNamedItem('websocket').textContent
 
       if (websocketURL === null) {
         let error_message =
@@ -148,7 +146,10 @@ class ChatBox extends HTMLElement {
         throw new Error(error_message)
       }
 
-      this.socketConnection = new WebSocket(websocketURL, ['access_token', 'test'])
+      this.socketConnection = new WebSocket(websocketURL, [
+        'access_token',
+        'test',
+      ])
 
       this.socketConnection.onopen = (ev) => {
         console.debug('websocket connected')
